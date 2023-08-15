@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { EmployeeModule } from './employee/employee.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
       autoLoadModels: true,
       synchronize: false,
     }),
+    EmployeeModule,
   ],
   controllers: [],
   providers: [],
