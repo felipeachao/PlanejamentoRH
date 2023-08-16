@@ -7,7 +7,7 @@ services:
     ports:
       - '5432:5432'
     environment:
-      DB_USERNAME: admin
-      DB_PASSWORD: postgres
-      DB_DATABASE: postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DATABASE: postgres
 # sudo docker-compose -f docker-compose.yml up --build -d database
