@@ -1,11 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { Sequelize, Transaction } from 'sequelize';
+import { InjectConnection, InjectModel } from '@nestjs/sequelize';
+import { EmployeeModel } from './model/employee.model';
 
 @Injectable()
 export class EmployeeService {
-  create(createEmployeeDto: CreateEmployeeDto) {
-    return 'This action adds a new employee';
+  constructor(
+    @InjectModel(EmployeeModel)
+    private employeeModel: typeof EmployeeModel,
+    @InjectConnection()
+    private readonly sequelizeInstace: Sequelize,
+  ) {}
+  async create(createEmployeeDto: CreateEmployeeDto) {
+    let transaction: Transaction;
+    try {
+      transaction = await this.sequelizeInstace.transaction();
+      const create = await this.employeeModel.create(createEmployeeDto, {
+        transaction,
+      });
+      await transaction.commit();
+      return create;
+    } catch (error) {
+      console.log(error);
+      if (transaction) await transaction.rollback();
+      throw error;
+    }
   }
 
   findAll() {
